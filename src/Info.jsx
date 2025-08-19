@@ -230,8 +230,8 @@ export default function Info({ weatData, updateBackground }) {
             </span>
           </div>
         </div>
-        <div className="c1b">
-          <div className="button-container">
+        <div className="c1b" >
+          <div className="button-container" >
             {btnData.map((w, index) => (
               <button
                 key={index}

@@ -71,9 +71,10 @@ export default function SearchBox({ updateWeatherInfo, clr }) {
       </form>
       {cityDate.currCity ?
         <div className="city-detail">
-          <span>
+          <span id="sp1">
             <p>{cityDate.currCity}</p>
             <p>{cityDate.currDate}</p>
+            <span class="material-symbols-outlined">menu</span>
           </span>
         </div> : null}
 
