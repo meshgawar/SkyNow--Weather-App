@@ -21,10 +21,10 @@ function Time(now) {
   return formattedTime;
 }
 
-export default function SearchBox({updateWeatherInfo , clr}) {
+export default function SearchBox({ updateWeatherInfo, clr }) {
   let [city, setCity] = useState("");
   const [error, setError] = useState("");
-  const [cityDate , setCityDate] = useState("");
+  const [cityDate, setCityDate] = useState("");
 
   let API_KEY = "3701ffee60fbac12ee8ae2679d26aad5"
   let nowDateTime = new Date();
@@ -49,8 +49,8 @@ export default function SearchBox({updateWeatherInfo , clr}) {
     e.preventDefault();
     let value = e.target.value
     setCityDate({
-      currCity : city.toUpperCase(),
-      currDate : date(nowDateTime), 
+      currCity: city.toUpperCase(),
+      currDate: date(nowDateTime),
     })
     setCity("");
     let newdata = await getweatherinfo();
@@ -65,15 +65,18 @@ export default function SearchBox({updateWeatherInfo , clr}) {
   }
   return (
     <div className="header">
-      <form className="form-cont" onSubmit={handleSubmit} style={error ? { border: '1px solid red' } : null} >
-        <InputBase placeholder="City Name" id="city" onChange={handleChange} sx={sx1} value={city} style={error ? { color: "red" } : {color : clr}} />
-        <button type='submit'><SearchOutlinedIcon style={{ color: 'gray', cursor: 'pointer' }} /></button>
+      <form className="form-cont" onSubmit={handleSubmit} style={error ? { border: '1px solid red' } : { border: `1px solid ${clr}` }} >
+        <InputBase placeholder="City Name" id="city" onChange={handleChange} sx={sx1} value={city} style={error ? { color: "red" } : { color: clr }} />
+        <button type='submit'><SearchOutlinedIcon style={{ color: clr, cursor: 'pointer' }} /></button>
       </form>
-      <span></span>
-      <span>
-        <p>{cityDate.currCity}</p>
-        <p>{cityDate.currDate}</p>
-      </span>
+      {cityDate.currCity ?
+        <div className="city-detail">
+          <span>
+            <p>{cityDate.currCity}</p>
+            <p>{cityDate.currDate}</p>
+          </span>
+        </div> : null}
+
     </div>
   );
 }
