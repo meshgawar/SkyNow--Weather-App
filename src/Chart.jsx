@@ -28,7 +28,7 @@ export default function Chart({cData}) {
     }
 
     return (
-        <ResponsiveContainer width="100%" height={150}>
+        <ResponsiveContainer width="100%" height={150} style={{userSelect: "none",pointerEvents: "none"}}>
             <LineChart
                 data={data}
                 margin={{ top: 30, right: 40, bottom: 20, left: 0 }}
