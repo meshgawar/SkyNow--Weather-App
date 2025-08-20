@@ -87,7 +87,7 @@ function getWeatherIcon(condition) {
 }
 
 
-export default function Info({ weatData, updateBackground }) {
+export default function Info({ weatData, updateBackground, flag }) {
   const [selected, setSelected] = useState(null);
   let [result, setResult] = useState("");
   const [btnData, setBtnData] = useState([]);
@@ -164,7 +164,6 @@ export default function Info({ weatData, updateBackground }) {
   }, [weatData]);
 
 
-  // console.log(btnData)
 
   useEffect(() => {
     if (weatData && weatData !== "") {
@@ -203,7 +202,6 @@ export default function Info({ weatData, updateBackground }) {
     }
   }, [btnData]);
 
-
   return (
     <div className='info-cont'>
       <div className="c1">
@@ -231,6 +229,7 @@ export default function Info({ weatData, updateBackground }) {
           </div>
         </div>
         <div className="c1b" >
+          {flag ? 
           <div className="button-container" >
             {btnData.map((w, index) => (
               <button
@@ -247,6 +246,7 @@ export default function Info({ weatData, updateBackground }) {
               </button>
             ))}
           </div>
+          : null}
         </div>
       </div>
       <div className="c2">

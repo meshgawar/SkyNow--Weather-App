@@ -1,7 +1,6 @@
 .button-container {
   height: 70%;
-  margin-bottom: 6rem;
-  /* border-bottom-right-radius: 1rem; */
+  width: 30%;
   border-bottom-left-radius: 1rem;
   display: flex;
   flex-direction: column;
@@ -61,4 +60,10 @@
 .temp {
   font-weight: bold;
   font-size: 1.2rem;
+}
+
+@media (min-width: 390px) and (max-width: 400px) {
+  .button-container{
+    width: 100%;
+  }
 }

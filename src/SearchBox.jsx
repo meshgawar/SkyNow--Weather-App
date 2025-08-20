@@ -21,7 +21,7 @@ function Time(now) {
   return formattedTime;
 }
 
-export default function SearchBox({ updateWeatherInfo, clr }) {
+export default function SearchBox({ updateWeatherInfo, clr, toggle }) {
   let [city, setCity] = useState("");
   const [error, setError] = useState("");
   const [cityDate, setCityDate] = useState("");
@@ -63,6 +63,7 @@ export default function SearchBox({ updateWeatherInfo, clr }) {
     backgroundColor: 'transparent',
     width: '20rem'
   }
+  
   return (
     <div className="header">
       <form className="form-cont" onSubmit={handleSubmit} style={error ? { border: '1px solid red' } : { border: `1px solid ${clr}` }} >
@@ -74,7 +75,7 @@ export default function SearchBox({ updateWeatherInfo, clr }) {
           <span id="sp1">
             <p>{cityDate.currCity}</p>
             <p>{cityDate.currDate}</p>
-            <span class="material-symbols-outlined">menu</span>
+            <button onClick={toggle} style={{color : clr}}><span class="material-symbols-outlined">menu</span></button>
           </span>
         </div> : null}
 

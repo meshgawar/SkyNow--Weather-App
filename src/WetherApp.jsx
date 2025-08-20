@@ -71,6 +71,7 @@ function getColor(condition) {
 export default function WeatherApp() {
     let [getWeatherData, setWeatherData] = useState("");
     let [getBack, setBack] = useState({ image: "https://plus.unsplash.com/premium_photo-1727730047398-49766e915c1d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y2xlYXIlMjBza3l8ZW58MHx8MHx8fDA%3D", color: "white" });
+    let [getFlag, setFlag] = useState(false);
 
     let updateWeatherInfo = (newData) => {
         setWeatherData(newData);
@@ -106,20 +107,28 @@ export default function WeatherApp() {
         color: `${getBack.color}`,
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
         alignItems: "center",
     }
 
+    function toggle() {
+        setFlag(prevflag => !prevflag);
+    }
+
+    useEffect(() => {
+        console.log("Flag changed:", getFlag);
+    }, [getFlag]);
+
+
     return (
         <div style={getWeatherData ? sty : sty2}>
-            <SearchBox updateWeatherInfo={updateWeatherInfo} clr={getBack.color} />
+            <SearchBox updateWeatherInfo={updateWeatherInfo} toggle={toggle} clr={getBack.color} />
             {getWeatherData ? null :
-            <div className="free">
-                <h1>Search For The Weather</h1>
-            </div>
+                <div className="free">
+                    <h1>Search For The Weather</h1>
+                </div>
             }
             {getWeatherData ?
-                <Info weatData={getWeatherData} updateBackground={updateBackground} />
+                <Info weatData={getWeatherData} updateBackground={updateBackground} flag={getFlag}/>
                 : null}
         </div>
     )
