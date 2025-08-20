@@ -47,12 +47,12 @@ export default function Chart({cData}) {
                     tickLine={false}     // removes the small tick lines
                     tick={false}         // To remove the values of axis
                 />
-                <Tooltip
+                {/* <Tooltip
                     formatter={(value, name) =>
                         name === 'temp' ? [`${value}°C`, 'Temperature'] : [value, name]
                     }
                     labelFormatter={(label) => `${label}:00`}
-                />
+                /> */}
                 <Line
                     type="natural"
                     dataKey="temp"
@@ -61,8 +61,8 @@ export default function Chart({cData}) {
                     dot={{ r: 5, fill: "#fff", stroke: "#3366ff" }}
                 >
                     {/* Padding added using dy */}
-                    <LabelList dataKey="hour" position="bottom" dy={10} formatter={(v) => `${v}:00`} />
-                    <LabelList dataKey="temp" position="top" dy={-10} formatter={(v) => `${v}°C`} />
+                    <LabelList dataKey="hour" position="bottom" dy={10} formatter={(v) => `${v}:00`} style={{ fill: "white", fontWeight: "bold" }} />
+                    <LabelList dataKey="temp" position="top" dy={-10} formatter={(v) => `${v}°C`} style={{ fill: "white", fontWeight: "bold" }}/>
                 </Line>
             </LineChart>
         </ResponsiveContainer>

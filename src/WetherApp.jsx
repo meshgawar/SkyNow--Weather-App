@@ -33,14 +33,14 @@ function getWeatherBackground(condition) {
 }
 function getColor(condition) {
     const lightBackgrounds = [
-        "clear sky",
-        "scattered clouds",
         "light snow",
         "snow"
     ];
 
     const darkBackgrounds = [
         "overcast clouds",
+        "clear sky",
+        "scattered clouds",
         "few clouds",
         "broken clouds",
         "shower rain",
