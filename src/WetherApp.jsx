@@ -97,6 +97,7 @@ export default function WeatherApp() {
         backgroundSize: "cover",
         fontFamily: 'roboto',
         height: "100vh",
+        overflow : "hidden",
     }
     let sty2 = {
         backgroundImage: `url(${getBack.image})`,
@@ -108,6 +109,7 @@ export default function WeatherApp() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        overflow : "hidden",
     }
 
     function toggle() {
