@@ -102,7 +102,7 @@ export default function Info({ weatData, updateBackground, flag }) {
   const now = new Date();
   const currTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-  // Storing Data for buttons at a same time
+  // Storing Data for buttons 
   useEffect(() => {
     if (weatData && weatData !== "") {
       const fullWeekData = WeekData(weatData);
@@ -145,8 +145,8 @@ export default function Info({ weatData, updateBackground, flag }) {
 
         // Avoid duplicates of day name
         if (!usedDays.has(dayName)) {
-          usedDays.add(dayName);
-          filtered.push({
+            usedDays.add(dayName);
+            filtered.push({
             day: dayName, // e.g., "Monday"
             weather: closest.weather,
             temp: Math.round(closest.temp),
@@ -169,9 +169,9 @@ export default function Info({ weatData, updateBackground, flag }) {
     if (weatData && weatData !== "") {
       let today = new Date();
       const current = CurrWeather(weatData, today);
-      console.log(current)
-      setResult(current[1]);
-      updateBackground(current[1].weather)
+      console.log(current);
+      setResult(current[0]);
+      updateBackground(current[0].weather);
       setChartData(current);
     }
   }, [weatData]);

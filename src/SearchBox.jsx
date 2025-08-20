@@ -1,7 +1,8 @@
 import "./SearchBox.css";
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import InputBase from '@mui/material/InputBase';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import VoiceRec from "./VoiceRec";
 
 function date(now) {
 
@@ -46,16 +47,25 @@ export default function SearchBox({ updateWeatherInfo, clr, toggle }) {
     setCity(e.target.value);
   }
   let handleSubmit = async (e) => {
-    e.preventDefault();
-    let value = e.target.value
-    setCityDate({
-      currCity: city.toUpperCase(),
-      currDate: date(nowDateTime),
-    })
-    setCity("");
-    let newdata = await getweatherinfo();
-    updateWeatherInfo(newdata)
+  e.preventDefault();
+
+  if (!city || city.trim() === "" || city.trim() === "Error") {
+    console.error("City name cannot be empty");
+    return;
   }
+
+  setCityDate({
+    currCity: city.toUpperCase(),
+    currDate: date(nowDateTime),
+  });
+
+  let newdata = await getweatherinfo();
+  updateWeatherInfo(newdata);
+
+  setCity("");  
+};
+
+
   let sx1 = {
     border: 'none',
     outline: 'none',
@@ -63,19 +73,29 @@ export default function SearchBox({ updateWeatherInfo, clr, toggle }) {
     backgroundColor: 'transparent',
     width: '20rem'
   }
-  
+
+  // Update City From VoiceRec.jsx File
+  function updateCity(cityname) {
+    if (cityname != "Error" && cityname != null && cityname != "") {
+      setCity(cityname);
+    }
+  }
+
+
+
   return (
     <div className="header">
       <form className="form-cont" onSubmit={handleSubmit} style={error ? { border: '1px solid red' } : { border: `1px solid ${clr}` }} >
-        <InputBase placeholder="City Name" id="city" onChange={handleChange} sx={sx1} value={city} style={error ? { color: "red" } : { color: clr }} />
         <button type='submit'><SearchOutlinedIcon style={{ color: clr, cursor: 'pointer' }} /></button>
+        <InputBase placeholder="City Name" id="city" onChange={handleChange} sx={sx1} value={city} style={error ? { color: "red" } : { color: clr }} />
+        <VoiceRec clr={clr} updateCity={updateCity} />
       </form>
       {cityDate.currCity ?
         <div className="city-detail">
           <span id="sp1">
             <p>{cityDate.currCity}</p>
             <p>{cityDate.currDate}</p>
-            <button onClick={toggle} style={{color : clr}}><span class="material-symbols-outlined">menu</span></button>
+            <button onClick={toggle} style={{ color: clr }}><span className="material-symbols-outlined">menu</span></button>
           </span>
         </div> : null}
 
