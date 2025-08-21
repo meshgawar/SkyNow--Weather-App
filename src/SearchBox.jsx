@@ -34,6 +34,7 @@ export default function SearchBox({ updateWeatherInfo, clr, toggle, geoCity }) {
   let API_KEY = "3701ffee60fbac12ee8ae2679d26aad5"
   let nowDateTime = new Date();
 
+  // Getting Weather
   let getweatherinfo = async () => {
     let res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${API_KEY}`);
     let jsonRes = await res.json();
@@ -41,6 +42,16 @@ export default function SearchBox({ updateWeatherInfo, clr, toggle, geoCity }) {
     return jsonRes;
   }
 
+  // Getting AQI
+  let getAQI = async (lat,lon) => {
+    let token = "4f3002e3785f3e269645af5723dd4f94e2ae2e1d";
+    let res = await fetch(`https://api.waqi.info/feed/${city}/?token=${token}`);
+    let jsonRes = await res.json();
+
+    return jsonRes.data.aqi;
+  }
+
+  // Handling Changes Of Input Box
   function handleChange(e) {
     let val = e.target.value;
     if (!/^[a-zA-Z\s]+$/.test(val)) {
@@ -65,7 +76,11 @@ export default function SearchBox({ updateWeatherInfo, clr, toggle, geoCity }) {
 
   let newdata = await getweatherinfo();
   updateWeatherInfo(newdata);
-
+  
+  let AQI = await getAQI();
+  console.log(AQI);
+  
+  console.log(newdata)
   setCity(""); // Set city to empty 
 };
 
