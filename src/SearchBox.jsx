@@ -22,10 +22,14 @@ function Time(now) {
   return formattedTime;
 }
 
-export default function SearchBox({ updateWeatherInfo, clr, toggle }) {
+export default function SearchBox({ updateWeatherInfo, clr, toggle, geoCity }) {
   let [city, setCity] = useState("");
   const [error, setError] = useState("");
   const [cityDate, setCityDate] = useState("");
+
+  useEffect(() => {
+    setCity(geoCity);
+  },[geoCity]);
 
   let API_KEY = "3701ffee60fbac12ee8ae2679d26aad5"
   let nowDateTime = new Date();
@@ -62,10 +66,10 @@ export default function SearchBox({ updateWeatherInfo, clr, toggle }) {
   let newdata = await getweatherinfo();
   updateWeatherInfo(newdata);
 
-  setCity("");  
+  setCity(""); // Set city to empty 
 };
 
-
+  // Custom Styling
   let sx1 = {
     border: 'none',
     outline: 'none',

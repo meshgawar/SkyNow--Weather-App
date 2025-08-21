@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Info from "./Info";
 import SearchBox from "./SearchBox";
+import useLocation from "./Location";
 import '@fontsource/roboto/300.css';
 import "./WeatherApp.css";
 
@@ -72,6 +73,7 @@ export default function WeatherApp() {
     let [getWeatherData, setWeatherData] = useState("");
     let [getBack, setBack] = useState({ image: "https://plus.unsplash.com/premium_photo-1727730047398-49766e915c1d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y2xlYXIlMjBza3l8ZW58MHx8MHx8fDA%3D", color: "white" });
     let [getFlag, setFlag] = useState(false);
+    const { city, error, loading } = useLocation(); // To featch GeoLocation 
 
     let updateWeatherInfo = (newData) => {
         setWeatherData(newData);
@@ -123,10 +125,12 @@ export default function WeatherApp() {
 
     return (
         <div style={getWeatherData ? sty : sty2}>
-            <SearchBox updateWeatherInfo={updateWeatherInfo} toggle={toggle} clr={getBack.color} />
+            <SearchBox updateWeatherInfo={updateWeatherInfo} toggle={toggle} clr={getBack.color} geoCity={city} />
             {getWeatherData ? null :
                 <div className="free">
-                    <h1>Search For The Weather</h1>
+                    {loading ? (<h1>Fetching Current Location...</h1>) : 
+                    error ? (<h1>An Error Occured! Search For The Weather</h1>) : 
+                    city ? (null) : (<h1>Can't Find Current Location Search For The Weather</h1>)}
                 </div>
             }
             {getWeatherData ?

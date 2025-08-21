@@ -1,5 +1,4 @@
 import { useState, useEffect, act } from "react";
-import "./VoiceRec.css";
 
 export default function VoiceRec({ clr, updateCity }) {
     const [getText, setText] = useState("");
@@ -51,14 +50,6 @@ export default function VoiceRec({ clr, updateCity }) {
             <button type="button" onClick={handleClick} >
                 <span className="material-symbols-outlined sp1" style={active ? { color: "blue" } : { color: clr }}>mic</span>
             </button>
-            {/* {active ? 
-      <div className="mic-wrapper">
-        <div className="mic">
-          <span className="mic-icon"></span>
-          <div className="mic-shadow"></div>
-        </div>
-      </div>
-      : null} */}
         </>
     );
 }
