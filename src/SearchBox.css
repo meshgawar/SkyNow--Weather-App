@@ -46,9 +46,12 @@ p {
   }
   .form-cont {
     margin-top: 2%;
+    margin-left: 0%; 
+    width: 90%;
   }
   .city-detail {
     width: 90%;
+    margin-left: 2%;
   }
   #sp1{
     width: 100%;

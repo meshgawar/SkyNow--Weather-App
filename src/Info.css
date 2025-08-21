@@ -57,6 +57,7 @@
 .spn p {
   position: relative;
   top: -35px;
+  left: 6px;
   font-weight: bold;
   font-size: x-large;
 }
