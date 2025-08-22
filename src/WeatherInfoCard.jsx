@@ -34,10 +34,6 @@ export default function WeatherInfoCard({ result, city, idx }) {
     fetchAQI();
   }, [city]);
 
-  useEffect(() => {
-    console.log(result);
-  }, [result]);
-
   const hasData = Array.isArray(result) && idx !== -1 && result[idx];
 
   return (

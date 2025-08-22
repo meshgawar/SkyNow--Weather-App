@@ -57,9 +57,7 @@ export default function SearchBox({ updateWeatherInfo, clr, toggle, geoCity }) {
     updateWeatherInfo(newdata);
 
     let AQI = await getAQI(city);
-    console.log(AQI);
 
-    console.log(newdata)
     setCity(""); // Set city to empty 
   };
 

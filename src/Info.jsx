@@ -214,9 +214,6 @@ export default function Info({ weatData, updateBackground, flag }) {
     setCardData(btnData);
   },[btnData]);
 
-
-  console.log(selected)
-
   return (
     <div className='info-cont'>
       <div className="c1">

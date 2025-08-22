@@ -63,8 +63,8 @@ p {
   .header {
     gap: 0;
     flex-wrap: wrap;
-    justify-content: space-between;
-    padding: 0.5rem;
+    /* justify-content: space-between;
+    padding: 0.5rem; */
   }
   .form-cont {
     margin-top: 2%;

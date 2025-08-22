@@ -80,11 +80,7 @@ function WeatherApp() {
     let updateWeatherInfo = (newData) => {
         setWeatherData(newData);
     }
-    useEffect(()=> {
-        console.log(getWeatherData);
-    },[getWeatherData])
    
-
     let updateBackground = (back) => {
         let image = getWeatherBackground(back);
         let color = getColor(back);
