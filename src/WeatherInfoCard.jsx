@@ -41,7 +41,7 @@ export default function WeatherInfoCard({ result, city, idx }) {
   const hasData = Array.isArray(result) && idx !== -1 && result[idx];
 
   return (
-    <Box sx={{ flexGrow: 1, p: 2 }}>
+    <Box sx={{ flexGrow: 1, p: 2,maxHeight: '100%' }}>
       {/* First Row */}
       <Grid container spacing={1} columns={16}>
         <Grid size={{ xs: 16, sm: 8 }}>
@@ -93,7 +93,7 @@ export default function WeatherInfoCard({ result, city, idx }) {
               <span className="material-symbols-outlined">rainy</span>
               <h4 style={{ margin: 0 }}>POP</h4>
             </div>
-            <p style={{ margin: 0 }}>{hasData ? `${result[idx].pop * 100}%` : "--"}</p>
+            <p style={{ margin: 0 }}>{hasData ? `${Math.round(result[idx].pop * 100)}%` : "--"}</p>
           </Item>
         </Grid>
         <Grid size={{ xs: 16, sm: 8 }}>
