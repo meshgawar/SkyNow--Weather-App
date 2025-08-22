@@ -41,6 +41,7 @@ export default function VoiceRec({ clr, updateCity }) {
     useEffect(() => {
         if (getText !== "") {
             updateCity(getText);
+            setText(""); 
         }
     }, [getText, updateCity]);
 

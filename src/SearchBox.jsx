@@ -3,7 +3,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import InputBase from '@mui/material/InputBase';
 import { useEffect, useState } from 'react';
 import VoiceRec from "./VoiceRec";
-import {getAQI,getweatherinfo} from "./API.js";
+import { getAQI, getweatherinfo } from "./API.js";
 
 function date(now) {
 
@@ -14,14 +14,6 @@ function date(now) {
   const formattedDate = `${day}-${month}-${year}`;
   return formattedDate;
 }
-function Time(now) {
-
-  // Format time as H:MM
-  let hours = now.getHours();
-  let minutes = String(now.getMinutes()).padStart(2, '0');
-  const formattedTime = `${hours}:${minutes}`;
-  return formattedTime;
-}
 
 export default function SearchBox({ updateWeatherInfo, clr, toggle, geoCity }) {
   let [city, setCity] = useState("");
@@ -29,43 +21,47 @@ export default function SearchBox({ updateWeatherInfo, clr, toggle, geoCity }) {
   const [cityDate, setCityDate] = useState("");
 
   useEffect(() => {
-    setCity(geoCity);
-  },[geoCity]);
+    if (!city && geoCity) {
+      setCity(geoCity);
+    }
+  }, [geoCity]);
 
   let nowDateTime = new Date();
 
   // Handling Changes Of Input Box
   function handleChange(e) {
-    let val = e.target.value;
-    if (!/^[a-zA-Z\s]+$/.test(val)) {
+    const val = e.target.value;
+    setCity(val);
+    
+    if (!/^[a-zA-Z\s]*$/.test(val)) {
       setError('Only alphabetic characters are allowed');
     } else {
       setError('');
     }
-    setCity(e.target.value);
   }
+
   let handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!city || city.trim() === "" || city.trim() === "Error") {
-    console.error("City name cannot be empty");
-    return;
-  }
+    if (!city || city.trim() === "" || city.trim() === "Error") {
+      console.error("City name cannot be empty");
+      return;
+    }
 
-  setCityDate({
-    currCity: city.toUpperCase(),
-    currDate: date(nowDateTime),
-  });
+    setCityDate({
+      currCity: city.toUpperCase(),
+      currDate: date(nowDateTime),
+    });
 
-  let newdata = await getweatherinfo(city);
-  updateWeatherInfo(newdata);
-  
-  let AQI = await getAQI(city);
-  console.log(AQI);
-  
-  console.log(newdata)
-  setCity(""); // Set city to empty 
-};
+    let newdata = await getweatherinfo(city);
+    updateWeatherInfo(newdata);
+
+    let AQI = await getAQI(city);
+    console.log(AQI);
+
+    console.log(newdata)
+    setCity(""); // Set city to empty 
+  };
 
   // Custom Styling
   let sx1 = {
@@ -78,8 +74,10 @@ export default function SearchBox({ updateWeatherInfo, clr, toggle, geoCity }) {
 
   // Update City From VoiceRec.jsx File
   function updateCity(cityname) {
-    if (cityname != "Error" && cityname != null && cityname != "") {
-      setCity(cityname);
+    if (cityname && cityname !== "Error") {
+      const trimmed = cityname.trim();
+      setCity(trimmed);
+      setError("");
     }
   }
 
@@ -89,7 +87,7 @@ export default function SearchBox({ updateWeatherInfo, clr, toggle, geoCity }) {
     <div className="header">
       <form className="form-cont" onSubmit={handleSubmit} style={error ? { border: '1px solid red' } : { border: `1px solid ${clr}` }} >
         <button type='submit'><SearchOutlinedIcon style={{ color: clr, cursor: 'pointer' }} /></button>
-        <InputBase placeholder="City Name" id="city" onChange={handleChange} sx={sx1} value={city ? city : ""} style={error ? { color: "red" } : { color: clr }} />
+        <InputBase placeholder="City Name" id="city" onChange={handleChange} sx={{ ...sx1, color: error ? "red" : clr }} value={city} />
         <VoiceRec clr={clr} updateCity={updateCity} />
       </form>
       {cityDate.currCity ?
