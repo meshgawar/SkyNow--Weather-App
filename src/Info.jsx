@@ -1,11 +1,11 @@
 import '@fontsource/roboto/300.css';
 import './Info.css';
 import "./ToggleButton.css";
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Chart from "./Chart.jsx";
+import WeatherInfoCard from './WeatherInfoCard.jsx';
 
 function CurrWeather(obj, now = new Date()) {
-  console.log("now: ", now)
   const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // 00:00 of `now`
   const endOfDay = new Date(startOfDay);
   endOfDay.setDate(startOfDay.getDate() + 1); // 00:00 of next day
@@ -25,6 +25,8 @@ function CurrWeather(obj, now = new Date()) {
         feelsLike: obj.list[i].main.feels_like,
         weather: obj.list[i].weather[0].description,
         wind: obj.list[i].wind?.speed || "N/A",
+        pop: obj.list[i].pop,
+        visibility: obj.list[i].visibility,
       });
     }
   }
@@ -39,7 +41,7 @@ function WeekData(obj) {
 
   for (let i = 0; i < obj.list.length; i++) {
     const rawDateStr = obj.list[i].dt_txt;
-    const dateObj = new Date(rawDateStr); // Ensure it's a Date object
+    const dateObj = new Date(rawDateStr);
 
     result.push({
       date: `${String(dateObj.getDate()).padStart(2, '0')}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${dateObj.getFullYear()}`,
@@ -89,19 +91,18 @@ function getWeatherIcon(condition) {
 
 
 export default function Info({ weatData, updateBackground, flag }) {
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState(0);
   let [result, setResult] = useState("");
   const [btnData, setBtnData] = useState([]);
   const [chartData, setChartData] = useState();
+  const [cardData, setCardData] = useState();
 
-  // Large and complete data for each and every day and time
+  // complete data for each and every day and time
   const res = weatData && weatData !== "" ? WeekData(weatData) : null;
   let weekData = Array.isArray(res) ? res : [];
 
-  // console.log(weekData)
   // Setting up currTime and Date
   const now = new Date();
-  const currTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
   // Storing Data for buttons 
   useEffect(() => {
@@ -146,8 +147,8 @@ export default function Info({ weatData, updateBackground, flag }) {
 
         // Avoid duplicates of day name
         if (!usedDays.has(dayName)) {
-            usedDays.add(dayName);
-            filtered.push({
+          usedDays.add(dayName);
+          filtered.push({
             day: dayName, // e.g., "Monday"
             weather: closest.weather,
             temp: Math.round(closest.temp),
@@ -155,6 +156,8 @@ export default function Info({ weatData, updateBackground, flag }) {
             wind: closest.wind,
             humidity: closest.humidity,
             icon: getWeatherIcon(closest.weather),
+            pop: closest.pop,
+            visibility: closest.visibility,
           });
         }
       }
@@ -164,23 +167,29 @@ export default function Info({ weatData, updateBackground, flag }) {
     }
   }, [weatData]);
 
+  
 
-
+  // default set for today data
   useEffect(() => {
     if (weatData && weatData !== "") {
       let today = new Date();
       const current = CurrWeather(weatData, today);
-      console.log(current);
-      setResult(current[0]);
-      updateBackground(current[0].weather);
+      const firstData = current[0] || current[1] || null; 
+      setResult(firstData ? [firstData] : []);            
+      if (firstData) {
+        updateBackground(firstData.weather);
+      }
       setChartData(current);
     }
   }, [weatData]);
 
-  
+
+
   const handleClick = (index) => {
     const selectedData = btnData[index];
-    let selectedDate = new Date(selectedData.date_time)
+    if (!selectedData) return;
+
+    let selectedDate = new Date(selectedData.date_time);
     const formatDate = new Date(
       selectedDate.getFullYear(),
       selectedDate.getMonth(),
@@ -188,14 +197,12 @@ export default function Info({ weatData, updateBackground, flag }) {
     );
     const dataForChart = CurrWeather(weatData, formatDate);
 
-    console.log(dataForChart)
-
     setSelected(index);
-    setResult(selectedData);
+    setResult(selectedData ? [selectedData] : []); 
     setChartData(dataForChart);
-    updateBackground(selectedData.weather)
-    console.log("Updated Result: ", selectedData); // Logs the correct selected data
+    updateBackground(selectedData.weather);
   };
+
 
   useEffect(() => {
     if (btnData && btnData.length > 0) {
@@ -203,51 +210,40 @@ export default function Info({ weatData, updateBackground, flag }) {
     }
   }, [btnData]);
 
+  useEffect(() => {
+    setCardData(btnData);
+  },[btnData]);
+
+
+  console.log(selected)
+
   return (
     <div className='info-cont'>
       <div className="c1">
         <div className="c1a">
-          <div id='temp-cont'>
-            <h1 id='temp'>{result ? Math.round(result.temp) : "--"}</h1>
-            <p>&deg;C</p>
-          </div>
-          <h1>{result ? result.weather : "Loading..."}</h1>
           <div className='d2'>
-            <span className='spn'>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <span className="material-symbols-outlined">air</span>
-                <h4>Wind</h4>
-              </div>
-              <p>{result ? `${result.wind} Km/h` : "--"}</p>
-            </span>
-            <span className='spn'>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <span className="material-symbols-outlined">humidity_percentage</span>
-                <h4>Humidity</h4>
-              </div>
-              <p>{result ? `${result.humidity}%` : "--"}</p>
-            </span>
+            <WeatherInfoCard result={cardData} city={weatData.city.name} idx={selected} />
           </div>
         </div>
         <div className="c1b" >
-          {flag ? 
-          <div className="button-container" >
-            {btnData.map((w, index) => (
-              <button
-                key={index}
-                className={`day-button ${selected === index ? "active" : ""}`}
-                onClick={() => handleClick(index)}
-              >
-                <span className="material-symbols-outlined">{w.icon}</span>
-                <div className="weather-info">
-                  <h4>{w.day}</h4>
-                  <p>{w.weather}</p>
-                </div>
-                <span className="temp">{w.temp}&deg;</span>
-              </button>
-            ))}
-          </div>
-          : null}
+          {flag ?
+            <div className="button-container" >
+              {btnData.map((w, index) => (
+                <button
+                  key={index}
+                  className={`day-button ${selected === index ? "active" : ""}`}
+                  onClick={() => handleClick(index)}
+                >
+                  <span className="material-symbols-outlined">{w.icon}</span>
+                  <div className="weather-info">
+                    <h4>{w.day}</h4>
+                    <p style={{color:"gray"}}>{w.weather}</p>
+                  </div>
+                  <span className="temp">{w.temp}&deg;</span>
+                </button>
+              ))}
+            </div>
+            : null}
         </div>
       </div>
       <div className="c2">

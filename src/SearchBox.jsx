@@ -3,6 +3,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import InputBase from '@mui/material/InputBase';
 import { useEffect, useState } from 'react';
 import VoiceRec from "./VoiceRec";
+import {getAQI,getweatherinfo} from "./API.js";
 
 function date(now) {
 
@@ -31,25 +32,7 @@ export default function SearchBox({ updateWeatherInfo, clr, toggle, geoCity }) {
     setCity(geoCity);
   },[geoCity]);
 
-  let API_KEY = "3701ffee60fbac12ee8ae2679d26aad5"
   let nowDateTime = new Date();
-
-  // Getting Weather
-  let getweatherinfo = async () => {
-    let res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${API_KEY}`);
-    let jsonRes = await res.json();
-
-    return jsonRes;
-  }
-
-  // Getting AQI
-  let getAQI = async (lat,lon) => {
-    let token = "4f3002e3785f3e269645af5723dd4f94e2ae2e1d";
-    let res = await fetch(`https://api.waqi.info/feed/${city}/?token=${token}`);
-    let jsonRes = await res.json();
-
-    return jsonRes.data.aqi;
-  }
 
   // Handling Changes Of Input Box
   function handleChange(e) {
@@ -74,10 +57,10 @@ export default function SearchBox({ updateWeatherInfo, clr, toggle, geoCity }) {
     currDate: date(nowDateTime),
   });
 
-  let newdata = await getweatherinfo();
+  let newdata = await getweatherinfo(city);
   updateWeatherInfo(newdata);
   
-  let AQI = await getAQI();
+  let AQI = await getAQI(city);
   console.log(AQI);
   
   console.log(newdata)
@@ -106,7 +89,7 @@ export default function SearchBox({ updateWeatherInfo, clr, toggle, geoCity }) {
     <div className="header">
       <form className="form-cont" onSubmit={handleSubmit} style={error ? { border: '1px solid red' } : { border: `1px solid ${clr}` }} >
         <button type='submit'><SearchOutlinedIcon style={{ color: clr, cursor: 'pointer' }} /></button>
-        <InputBase placeholder="City Name" id="city" onChange={handleChange} sx={sx1} value={city} style={error ? { color: "red" } : { color: clr }} />
+        <InputBase placeholder="City Name" id="city" onChange={handleChange} sx={sx1} value={city ? city : ""} style={error ? { color: "red" } : { color: clr }} />
         <VoiceRec clr={clr} updateCity={updateCity} />
       </form>
       {cityDate.currCity ?

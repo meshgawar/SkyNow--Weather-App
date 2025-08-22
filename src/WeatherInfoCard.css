@@ -1,9 +1,15 @@
-
-/* Common Class */
+/* 
+/* Common Class 
 .flex{
     display: flex;
     align-items: center;
+    /* gap: 7rem; 
 }
 .card{
-    
+    border: 1px solid;
+    /* width: auto; 
+    height: 5rem;
 }
+h1{
+    border: 1px solid black;
+} */

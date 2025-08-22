@@ -11,6 +11,7 @@ import {
 
 
 export default function Chart({cData}) {
+    // console.log(JSON.stringify(cData))
     const data = [
         // { hour: 0, temp: 27 },
     ];
@@ -23,8 +24,6 @@ export default function Chart({cData}) {
                 temp: Math.round(newdata.temp),
             })
         }
-
-        console.log(data)
     }
 
     return (

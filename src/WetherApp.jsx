@@ -69,19 +69,23 @@ function getColor(condition) {
 }
 
 
-export default function WeatherApp() {
+function WeatherApp() {
     let [getWeatherData, setWeatherData] = useState("");
     let [getBack, setBack] = useState({ image: "https://plus.unsplash.com/premium_photo-1727730047398-49766e915c1d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y2xlYXIlMjBza3l8ZW58MHx8MHx8fDA%3D", color: "white" });
     let [getFlag, setFlag] = useState(false);
-    const { city, error, loading } = useLocation(); // To featch GeoLocation 
 
+    const { city, error, loading } = useLocation(); 
+
+    // Fetching GeoLocation
     let updateWeatherInfo = (newData) => {
         setWeatherData(newData);
     }
-
+    useEffect(()=> {
+        console.log(getWeatherData);
+    },[getWeatherData])
+   
 
     let updateBackground = (back) => {
-        console.log("background is:", back);
         let image = getWeatherBackground(back);
         let color = getColor(back);
         if (image != "" && image != null) {
@@ -90,7 +94,6 @@ export default function WeatherApp() {
                 color: color,
             });
         }
-        console.log("background image is:", image);
     }
     let sty = {
         backgroundImage: `url(${getBack.image})`,
@@ -114,13 +117,10 @@ export default function WeatherApp() {
         overflow : "hidden",
     }
 
+    // For toggling buttons of info component by searchBox button
     function toggle() {
         setFlag(prevflag => !prevflag);
     }
-
-    useEffect(() => {
-        console.log("Flag changed:", getFlag);
-    }, [getFlag]);
 
 
     return (
@@ -130,7 +130,7 @@ export default function WeatherApp() {
                 <div className="free">
                     {loading ? (<h1>Fetching Current Location...</h1>) : 
                     error ? (<h1>An Error Occured! Search For The Weather</h1>) : 
-                    city ? (null) : (<h1>Can't Find Current Location Search For The Weather</h1>)}
+                    city ? ("") : (<h1>Can't Find Current Location Search For The Weather</h1>)}
                 </div>
             }
             {getWeatherData ?
@@ -139,3 +139,5 @@ export default function WeatherApp() {
         </div>
     )
 }
+
+export default WeatherApp;
