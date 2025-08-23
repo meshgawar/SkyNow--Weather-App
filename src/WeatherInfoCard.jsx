@@ -10,7 +10,6 @@ const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(2),
   textAlign: 'center',
-  // color: (theme.vars ?? theme).palette.text.secondary,
   borderRadius: '16px', // rounded corners
   boxShadow: '0 4px 12px rgba(0,0,0,0.1)', // subtle shadow
   display: 'flex',
@@ -22,6 +21,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: 'white'
 }));
 
+// Default Function
 export default function WeatherInfoCard({ result, city, idx }) {
   const [AQI, setAQI] = useState("");
 
@@ -102,7 +102,6 @@ export default function WeatherInfoCard({ result, city, idx }) {
           </Item>
         </Grid>
       </Grid>
-
     </Box>
   );
 }

@@ -3,19 +3,10 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import InputBase from '@mui/material/InputBase';
 import { useEffect, useState } from 'react';
 import VoiceRec from "./VoiceRec";
-import { getAQI, getweatherinfo } from "./API.js";
+import { date } from "./Helper";
 
-function date(now) {
-
-  // Format date as DD-MM-YYYY
-  const day = String(now.getDate()).padStart(2, '0');
-  const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
-  const year = now.getFullYear();
-  const formattedDate = `${day}-${month}-${year}`;
-  return formattedDate;
-}
-
-export default function SearchBox({ updateWeatherInfo, clr, toggle, geoCity }) {
+// Default Function
+export default function SearchBox({ getData, clr, toggle, geoCity, sendError }) {
   let [city, setCity] = useState("");
   const [error, setError] = useState("");
   const [cityDate, setCityDate] = useState("");
@@ -44,7 +35,7 @@ export default function SearchBox({ updateWeatherInfo, clr, toggle, geoCity }) {
     e.preventDefault();
 
     if (!city || city.trim() === "" || city.trim() === "Error") {
-      console.error("City name cannot be empty");
+      setError("City name cannot be empty");
       return;
     }
 
@@ -53,10 +44,8 @@ export default function SearchBox({ updateWeatherInfo, clr, toggle, geoCity }) {
       currDate: date(nowDateTime),
     });
 
-    let newdata = await getweatherinfo(city);
-    updateWeatherInfo(newdata);
-
-    let AQI = await getAQI(city);
+    // Sending City Name To WeatherApp
+    getData(city);
 
     setCity(""); // Set city to empty 
   };
@@ -79,7 +68,9 @@ export default function SearchBox({ updateWeatherInfo, clr, toggle, geoCity }) {
     }
   }
 
-
+  if (error) {
+    sendError(error);
+  }
 
   return (
     <div className="header">
